@@ -1,17 +1,18 @@
 package gollorum.signpost.items;
 
-import gollorum.signpost.Signpost;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 
-public class CalibratedPostWrench extends Item {
-	
-	public CalibratedPostWrench() {
-	    super();
+import gollorum.signpost.Tags;
 
-	    this.setUnlocalizedName("SignpostCalibratedTool");
-	    this.setCreativeTab(CreativeTabs.tabTools);
-	    this.setTextureName(Signpost.MODID + ":toolcalibrated");
-	}
+public class CalibratedPostWrench extends Item {
+
+    public CalibratedPostWrench() {
+        super();
+
+        this.setUnlocalizedName("SignpostCalibratedTool");
+        this.setCreativeTab(CreativeTabs.tabTools);
+        this.setTextureName(Tags.MODID + ":toolcalibrated");
+    }
 
 }

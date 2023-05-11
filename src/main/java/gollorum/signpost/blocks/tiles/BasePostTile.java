@@ -1,5 +1,8 @@
 package gollorum.signpost.blocks.tiles;
 
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.MinecraftForge;
+
 import gollorum.signpost.blocks.WaystoneContainer;
 import gollorum.signpost.event.UpdateWaystoneEvent;
 import gollorum.signpost.management.PostHandler;
@@ -8,65 +11,75 @@ import gollorum.signpost.network.messages.BaseUpdateClientMessage;
 import gollorum.signpost.network.messages.BaseUpdateServerMessage;
 import gollorum.signpost.util.BaseInfo;
 import gollorum.signpost.util.MyBlockPos;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.MinecraftForge;
 
 public class BasePostTile extends TileEntity implements WaystoneContainer {
 
-	public boolean isCanceled = false;
+    public boolean isCanceled = false;
 
-	public BasePostTile() {super();}
-	
-	public BasePostTile setup(){
-		return this;
-	}
-	
-	public BaseInfo getBaseInfo(){
-		return PostHandler.getNativeWaystones().getByPos(toPos());
-	}
+    public BasePostTile() {
+        super();
+    }
 
-	public MyBlockPos toPos(){
-		return new MyBlockPos(xCoord, yCoord, zCoord, dim());
-	}
+    public BasePostTile setup() {
+        return this;
+    }
 
-	public int dim(){
-		if(getWorldObj()==null||getWorldObj().provider==null){
-			return Integer.MIN_VALUE;
-		}else
-			return getWorldObj().provider.dimensionId;
-	}
-	
-	public void onBlockDestroy(MyBlockPos pos) {
-		isCanceled = true;
-		BaseInfo base = getBaseInfo();
-		if(PostHandler.getNativeWaystones().remove(base)){
-			MinecraftForge.EVENT_BUS.post(new UpdateWaystoneEvent(UpdateWaystoneEvent.WaystoneEventType.DESTROYED, getWorldObj(), xCoord, yCoord, zCoord, base==null?"":base.getName()));
-			NetworkHandler.netWrap.sendToAll(new BaseUpdateClientMessage());
-		}
-	}
+    public BaseInfo getBaseInfo() {
+        return PostHandler.getNativeWaystones()
+            .getByPos(toPos());
+    }
 
-	@Override
-	public void setName(String name) {
-		BaseInfo bi = getBaseInfo();
-		bi.setName(name);
-		NetworkHandler.netWrap.sendToServer(new BaseUpdateServerMessage(bi, false));
-	}
+    public MyBlockPos toPos() {
+        return new MyBlockPos(xCoord, yCoord, zCoord, dim());
+    }
 
-	@Override
-	public String getName() {
-		BaseInfo ws = getBaseInfo();
-		return ws == null ? "null" : getBaseInfo().toString();
-	}
+    public int dim() {
+        if (getWorldObj() == null || getWorldObj().provider == null) {
+            return Integer.MIN_VALUE;
+        } else return getWorldObj().provider.dimensionId;
+    }
 
-	@Override
-	public String toString() {
-		return getName();
-	}
-	
-	@Override
-	 public int getBlockMetadata(){
-		try{
-			return super.getBlockMetadata();
-		}catch(NullPointerException e){return 0;}
-	}
+    public void onBlockDestroy(MyBlockPos pos) {
+        isCanceled = true;
+        BaseInfo base = getBaseInfo();
+        if (PostHandler.getNativeWaystones()
+            .remove(base)) {
+            MinecraftForge.EVENT_BUS.post(
+                new UpdateWaystoneEvent(
+                    UpdateWaystoneEvent.WaystoneEventType.DESTROYED,
+                    getWorldObj(),
+                    xCoord,
+                    yCoord,
+                    zCoord,
+                    base == null ? "" : base.getName()));
+            NetworkHandler.netWrap.sendToAll(new BaseUpdateClientMessage());
+        }
+    }
+
+    @Override
+    public void setName(String name) {
+        BaseInfo bi = getBaseInfo();
+        bi.setName(name);
+        NetworkHandler.netWrap.sendToServer(new BaseUpdateServerMessage(bi, false));
+    }
+
+    @Override
+    public String getName() {
+        BaseInfo ws = getBaseInfo();
+        return ws == null ? "null" : getBaseInfo().toString();
+    }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
+
+    @Override
+    public int getBlockMetadata() {
+        try {
+            return super.getBlockMetadata();
+        } catch (NullPointerException e) {
+            return 0;
+        }
+    }
 }

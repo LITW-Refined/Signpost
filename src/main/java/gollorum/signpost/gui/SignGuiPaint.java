@@ -1,146 +1,151 @@
 package gollorum.signpost.gui;
 
+import java.util.HashSet;
+
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.util.ResourceLocation;
+
 import cpw.mods.fml.client.FMLClientHandler;
 import gollorum.signpost.SPEventHandler;
 import gollorum.signpost.blocks.SuperPostPost;
 import gollorum.signpost.blocks.tiles.SuperPostPostTile;
 import gollorum.signpost.util.BoolRun;
 import gollorum.signpost.util.Paintable;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.util.ResourceLocation;
-
-import java.util.HashSet;
 
 public class SignGuiPaint extends GuiScreen {
 
-	private GuiTextField nameInputBox;
-	private Paintable paintable;
-	private SuperPostPostTile tile;
-	
-	private HashSet<String> possibilities = new HashSet<>();
-	private int possibleCount = 0;
-	private int possibleIndex = 0;
+    private GuiTextField nameInputBox;
+    private Paintable paintable;
+    private SuperPostPostTile tile;
 
-	private boolean resetMouse;
+    private HashSet<String> possibilities = new HashSet<>();
+    private int possibleCount = 0;
+    private int possibleIndex = 0;
 
-	public SignGuiPaint(Paintable paintable, SuperPostPostTile tile) {
-		this.paintable = paintable;
-		this.tile = tile;
-		initGui();
-	}
+    private boolean resetMouse;
 
-	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		if(mc==null){
-			mc = FMLClientHandler.instance().getClient();
-		}
-		if(nameInputBox==null){
-			initGui();
-		}
-		drawDefaultBackground();
-		if(nameInputBox.getText() == null || nameInputBox.getText().equals("null")){
-			ResourceLocation loc = paintable==null ? tile.getPostPaint() : paintable.getTexture();
-			String name;
-			if(loc==null){
-				name = "";
-			}else{
-				name = SuperPostPostTile.locToString(loc);
-			}
-			nameInputBox.setText(name);
-		}
+    public SignGuiPaint(Paintable paintable, SuperPostPostTile tile) {
+        this.paintable = paintable;
+        this.tile = tile;
+        initGui();
+    }
 
-		try{
-			nameInputBox.drawTextBox();
-		}catch(Exception e){}
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        if (mc == null) {
+            mc = FMLClientHandler.instance()
+                .getClient();
+        }
+        if (nameInputBox == null) {
+            initGui();
+        }
+        drawDefaultBackground();
+        if (nameInputBox.getText() == null || nameInputBox.getText()
+            .equals("null")) {
+            ResourceLocation loc = paintable == null ? tile.getPostPaint() : paintable.getTexture();
+            String name;
+            if (loc == null) {
+                name = "";
+            } else {
+                name = SuperPostPostTile.locToString(loc);
+            }
+            nameInputBox.setText(name);
+        }
 
-		if(resetMouse){
-			resetMouse = false;
-			org.lwjgl.input.Mouse.setGrabbed(false);
-		}
-		super.drawScreen(mouseX, mouseY, partialTicks);
-	}
+        try {
+            nameInputBox.drawTextBox();
+        } catch (Exception e) {}
 
-	@Override
-	public boolean doesGuiPauseGame() {
-		return false;
-	}
+        if (resetMouse) {
+            resetMouse = false;
+            org.lwjgl.input.Mouse.setGrabbed(false);
+        }
+        super.drawScreen(mouseX, mouseY, partialTicks);
+    }
 
-	@Override
-	public void initGui() {
-		SPEventHandler.scheduleTask(new BoolRun(){
-			@Override
-			public boolean run(){
-				if(fontRendererObj==null){
-					return false;
-				}
-				nameInputBox = new GuiTextField(fontRendererObj, width/4, height/2 - 46, width/2, 20);
-				nameInputBox.setMaxStringLength(100);
-				ResourceLocation loc = paintable==null ? tile.getPostPaint() : paintable.getTexture();
-				String name;
-				if(loc==null){
-					name = "";
-				}else{
-					name = SuperPostPostTile.locToString(loc);
-				}
-				nameInputBox.setText(name);
-				return true;
-			}
-		});
-		nameInputBox = new GuiTextField(this.fontRendererObj, this.width/4, this.height/2 - 46, this.width/2, 20);
-		nameInputBox.setMaxStringLength(100);
-		if(mc==null){
-			mc = FMLClientHandler.instance().getClient();
-		}
-		ResourceLocation loc = paintable==null ? tile.getPostPaint() : paintable.getTexture();
-		String name;
-		if(loc==null){
-			name = "";
-		}else{
-			name = SuperPostPostTile.locToString(loc);
-		}
-		nameInputBox.setText(name);
-		nameInputBox.setFocused(true);
-		
-		resetMouse = true;
-	}
+    @Override
+    public boolean doesGuiPauseGame() {
+        return false;
+    }
 
-	@Override
-	protected void keyTyped(char par1, int par2) {
-		if(par1==13){
-			this.mc.displayGuiScreen(null);
-			return;
-		}
-		super.keyTyped(par1, par2);
-		this.nameInputBox.textboxKeyTyped(par1, par2);
-	}
+    @Override
+    public void initGui() {
+        SPEventHandler.scheduleTask(new BoolRun() {
 
-	@Override
-	public void updateScreen() {
-		super.updateScreen();
-		this.nameInputBox.updateCursorCounter();
-	}
+            @Override
+            public boolean run() {
+                if (fontRendererObj == null) {
+                    return false;
+                }
+                nameInputBox = new GuiTextField(fontRendererObj, width / 4, height / 2 - 46, width / 2, 20);
+                nameInputBox.setMaxStringLength(100);
+                ResourceLocation loc = paintable == null ? tile.getPostPaint() : paintable.getTexture();
+                String name;
+                if (loc == null) {
+                    name = "";
+                } else {
+                    name = SuperPostPostTile.locToString(loc);
+                }
+                nameInputBox.setText(name);
+                return true;
+            }
+        });
+        nameInputBox = new GuiTextField(this.fontRendererObj, this.width / 4, this.height / 2 - 46, this.width / 2, 20);
+        nameInputBox.setMaxStringLength(100);
+        if (mc == null) {
+            mc = FMLClientHandler.instance()
+                .getClient();
+        }
+        ResourceLocation loc = paintable == null ? tile.getPostPaint() : paintable.getTexture();
+        String name;
+        if (loc == null) {
+            name = "";
+        } else {
+            name = SuperPostPostTile.locToString(loc);
+        }
+        nameInputBox.setText(name);
+        nameInputBox.setFocused(true);
 
-	public void updateName(String newName) {
-		if (nameInputBox != null) {
-			nameInputBox.setText(newName);
-		}
-	}
+        resetMouse = true;
+    }
 
-	@Override
-	protected void mouseClicked(int x, int y, int btn) {
-		super.mouseClicked(x, y, btn);
-		this.nameInputBox.mouseClicked(x, y, btn);
-	}
+    @Override
+    protected void keyTyped(char par1, int par2) {
+        if (par1 == 13) {
+            this.mc.displayGuiScreen(null);
+            return;
+        }
+        super.keyTyped(par1, par2);
+        this.nameInputBox.textboxKeyTyped(par1, par2);
+    }
 
-	@Override
-	public void onGuiClosed() {
-		super.onGuiClosed();
-		if(paintable!=null){
-			paintable.setTexture(new ResourceLocation(nameInputBox.getText()));
-		}else{
-			tile.setPostPaint(new ResourceLocation(nameInputBox.getText()));
-		}
-		((SuperPostPost)tile.blockType).sendPostBasesToServer(tile);
-	}
+    @Override
+    public void updateScreen() {
+        super.updateScreen();
+        this.nameInputBox.updateCursorCounter();
+    }
+
+    public void updateName(String newName) {
+        if (nameInputBox != null) {
+            nameInputBox.setText(newName);
+        }
+    }
+
+    @Override
+    protected void mouseClicked(int x, int y, int btn) {
+        super.mouseClicked(x, y, btn);
+        this.nameInputBox.mouseClicked(x, y, btn);
+    }
+
+    @Override
+    public void onGuiClosed() {
+        super.onGuiClosed();
+        if (paintable != null) {
+            paintable.setTexture(new ResourceLocation(nameInputBox.getText()));
+        } else {
+            tile.setPostPaint(new ResourceLocation(nameInputBox.getText()));
+        }
+        ((SuperPostPost) tile.blockType).sendPostBasesToServer(tile);
+    }
 }

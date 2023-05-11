@@ -1,5 +1,13 @@
 package gollorum.signpost;
 
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.LinkedList;
+
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -9,86 +17,85 @@ import gollorum.signpost.blocks.tiles.BigPostPostTile;
 import gollorum.signpost.blocks.tiles.PostPostTile;
 import gollorum.signpost.network.NetworkHandler;
 import gollorum.signpost.worldGen.villages.VillageHandler;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-
-import java.io.InputStream;
-import java.util.Collection;
-import java.util.LinkedList;
 
 public class CommonProxy {
 
-	public BlockHandler blockHandler;
-	ItemHandler itemHandler = new ItemHandler();
+    public BlockHandler blockHandler;
+    ItemHandler itemHandler = new ItemHandler();
 
-	public CommonProxy() {
-		blockHandler = new BlockHandler();
-	}
+    public CommonProxy() {
+        blockHandler = new BlockHandler();
+    }
 
-	void preInit() {
-	}
+    void preInit() {}
 
-	public void init() {
-		registerBlocksAndItems();
-		registerHandlers();
-		registerVillageCreation();
-	}
+    public void init() {
+        registerBlocksAndItems();
+        registerHandlers();
+        registerVillageCreation();
+    }
 
-	private void registerVillageCreation() {
-		VillageHandler.getInstance().register();
-	}
+    private void registerVillageCreation() {
+        VillageHandler.getInstance()
+            .register();
+    }
 
-	private void registerHandlers() {
-		NetworkHandler.register();
-		SPEventHandler handler = SPEventHandler.INSTANCE;
-		MinecraftForge.EVENT_BUS.register(handler);
-		FMLCommonHandler.instance().bus().register(handler);
-	}
+    private void registerHandlers() {
+        NetworkHandler.register();
+        SPEventHandler handler = SPEventHandler.INSTANCE;
+        MinecraftForge.EVENT_BUS.register(handler);
+        FMLCommonHandler.instance()
+            .bus()
+            .register(handler);
+    }
 
-	private void registerBlocksAndItems() {
-		blockHandler.registerBlocks();
-		registerTiles();
-		itemHandler.registerItems();
-		registerRecipes();
-	}
+    private void registerBlocksAndItems() {
+        blockHandler.registerBlocks();
+        registerTiles();
+        itemHandler.registerItems();
+        registerRecipes();
+    }
 
-	protected void registerTiles() {
-		GameRegistry.registerTileEntity(BasePostTile.class, "SignpostBaseTile");
-		GameRegistry.registerTileEntity(PostPostTile.class, "SignpostPostTile");
-		GameRegistry.registerTileEntity(BigPostPostTile.class, "SignpostBigPostTile");
-		GameRegistry.registerTileEntity(BaseModelPostTile.class, "SignpostBaseModelPostTile");
-	}
+    protected void registerTiles() {
+        GameRegistry.registerTileEntity(BasePostTile.class, "SignpostBaseTile");
+        GameRegistry.registerTileEntity(PostPostTile.class, "SignpostPostTile");
+        GameRegistry.registerTileEntity(BigPostPostTile.class, "SignpostBigPostTile");
+        GameRegistry.registerTileEntity(BaseModelPostTile.class, "SignpostBaseModelPostTile");
+    }
 
-	protected void registerRecipes() {
-		blockHandler.registerRecipes();
-		itemHandler.registerRecipes();
-	}
+    protected void registerRecipes() {
+        blockHandler.registerRecipes();
+        itemHandler.registerRecipes();
+    }
 
-	public World getWorld(MessageContext ctx) {
-		return ctx.getServerHandler().playerEntity.worldObj;
-	}
+    public World getWorld(MessageContext ctx) {
+        return ctx.getServerHandler().playerEntity.worldObj;
+    }
 
-	public World getWorld(int dim) {
-		return FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(dim);
-	}
+    public World getWorld(int dim) {
+        return FMLCommonHandler.instance()
+            .getMinecraftServerInstance()
+            .worldServerForDimension(dim);
+    }
 
-	public World[] getWorlds() {
-		return FMLCommonHandler.instance().getMinecraftServerInstance().worldServers;
-	}
+    public World[] getWorlds() {
+        return FMLCommonHandler.instance()
+            .getMinecraftServerInstance().worldServers;
+    }
 
-	public Collection<EntityPlayer> getAllPlayers() {
-		LinkedList<EntityPlayer> ret = new LinkedList<EntityPlayer>();
-		for (Object now : FMLCommonHandler.instance().getMinecraftServerInstance()
-				.getConfigurationManager().playerEntityList) {
-			if (now instanceof EntityPlayer) {
-				ret.add((EntityPlayer) now);
-			}
-		}
-		return ret;
-	}
+    public Collection<EntityPlayer> getAllPlayers() {
+        LinkedList<EntityPlayer> ret = new LinkedList<EntityPlayer>();
+        for (Object now : FMLCommonHandler.instance()
+            .getMinecraftServerInstance()
+            .getConfigurationManager().playerEntityList) {
+            if (now instanceof EntityPlayer) {
+                ret.add((EntityPlayer) now);
+            }
+        }
+        return ret;
+    }
 
-	public InputStream getResourceInputStream(String location) {
-		return getClass().getResourceAsStream(location);
-	}
+    public InputStream getResourceInputStream(String location) {
+        return getClass().getResourceAsStream(location);
+    }
 }

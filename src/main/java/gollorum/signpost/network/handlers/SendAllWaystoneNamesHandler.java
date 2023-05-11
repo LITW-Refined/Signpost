@@ -8,14 +8,14 @@ import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import gollorum.signpost.network.messages.SendAllWaystoneNamesMessage;
 
-public class SendAllWaystoneNamesHandler implements IMessageHandler<SendAllWaystoneNamesMessage, IMessage>{
-	
-	public static Collection<String> cachedWaystoneNames = new HashSet<String>();
+public class SendAllWaystoneNamesHandler implements IMessageHandler<SendAllWaystoneNamesMessage, IMessage> {
 
-	@Override
-	public IMessage onMessage(SendAllWaystoneNamesMessage message, MessageContext ctx) {
-		cachedWaystoneNames = message.waystones;
-		return null;
-	}
+    public static Collection<String> cachedWaystoneNames = new HashSet<String>();
+
+    @Override
+    public IMessage onMessage(SendAllWaystoneNamesMessage message, MessageContext ctx) {
+        cachedWaystoneNames = message.waystones;
+        return null;
+    }
 
 }

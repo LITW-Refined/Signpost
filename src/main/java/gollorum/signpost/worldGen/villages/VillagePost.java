@@ -2,43 +2,45 @@ package gollorum.signpost.worldGen.villages;
 
 import java.util.List;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 import gollorum.signpost.management.PostHandler;
 import gollorum.signpost.util.MyBlockPos;
 import gollorum.signpost.util.Sign;
-import net.minecraft.nbt.NBTTagCompound;
 
 class VillagePost {
-	private MyBlockPos topSignPosition;
-	public Double desiredRotation;
 
-	public VillagePost(MyBlockPos topSignPosition, Double desiredRotation) {
-		this.topSignPosition = topSignPosition;
-		this.desiredRotation = desiredRotation;
-	}
+    private MyBlockPos topSignPosition;
+    public Double desiredRotation;
 
-	@Override
-	public String toString() {
-		return topSignPosition.toString();
-	}
+    public VillagePost(MyBlockPos topSignPosition, Double desiredRotation) {
+        this.topSignPosition = topSignPosition;
+        this.desiredRotation = desiredRotation;
+    }
 
-	public List<Sign> getSigns() {
-		return PostHandler.getSigns(topSignPosition);
-	}
+    @Override
+    public String toString() {
+        return topSignPosition.toString();
+    }
 
-	public MyBlockPos getTopSignPosition() {
-		return topSignPosition;
-	}
+    public List<Sign> getSigns() {
+        return PostHandler.getSigns(topSignPosition);
+    }
 
-	NBTTagCompound save() {
-		NBTTagCompound compound = new NBTTagCompound();
-		topSignPosition.writeToNBT(compound);
-		compound.setDouble("DesiredRotation", desiredRotation);
-		return compound;
-	}
+    public MyBlockPos getTopSignPosition() {
+        return topSignPosition;
+    }
 
-	static VillagePost load(NBTTagCompound compound) {
-		MyBlockPos topSignPosition = MyBlockPos.readFromNBT(compound);
-		double desiredRotation = compound.getDouble("DesiredRotation");
-		return new VillagePost(topSignPosition, desiredRotation);
-	}
+    NBTTagCompound save() {
+        NBTTagCompound compound = new NBTTagCompound();
+        topSignPosition.writeToNBT(compound);
+        compound.setDouble("DesiredRotation", desiredRotation);
+        return compound;
+    }
+
+    static VillagePost load(NBTTagCompound compound) {
+        MyBlockPos topSignPosition = MyBlockPos.readFromNBT(compound);
+        double desiredRotation = compound.getDouble("DesiredRotation");
+        return new VillagePost(topSignPosition, desiredRotation);
+    }
 }

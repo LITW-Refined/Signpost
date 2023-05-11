@@ -1,16 +1,23 @@
-[
 {
-  "modid": "signpost",
-  "name": "Signpost",
-  "description": "signpost mod.",
-  "version": "${version}",
-  "mcversion": "${mcversion}",
-  "url": "",
-  "updateUrl": "",
-  "authorList": ["Gollorum"],
-  "credits": "Developed by Gollorum; Chinese localization by TartaricAcid; Russian localization by Aqelius",
-  "logoFile": "",
-  "screenshots": [],
-  "dependencies": []
+	"modListVersion": 2,
+	"modList": [
+    {
+      "modid": "${modId}",
+      "name": "${modName}",
+      "description": "A mod that adds signs posts and waystones.",
+      "version": "${modVersion}",
+      "mcversion": "${minecraftVersion}",
+      "url": "https://github.com/Pilzinsel64/Signpost",
+      "updateUrl": "",
+      "authorList": ["Gollorum", "Pilzinsel64"],
+      "credits": "Developed by Gollorum; Chinese localization by TartaricAcid; Russian localization by Aqelius",
+      "logoFile": "",
+      "screenshots": [],
+      "parent": "",
+      "requiredMods": [],
+      "dependencies": [],
+      "dependants": [],
+      "useDependencyInformation": true
+    }
+  ]
 }
-]

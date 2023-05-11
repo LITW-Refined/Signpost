@@ -8,27 +8,27 @@ import io.netty.buffer.ByteBuf;
 
 public class BaseUpdateClientMessage implements IMessage {
 
-	public StonedHashSet waystones = new StonedHashSet();
-	
-	public BaseUpdateClientMessage(){
-		waystones = PostHandler.getNativeWaystones();
-	}
-	
-	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeInt(waystones.size());
-		for(BaseInfo now: waystones){
-			now.toBytes(buf);
-		}
-	}
+    public StonedHashSet waystones = new StonedHashSet();
 
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		waystones = new StonedHashSet();
-		int c = buf.readInt();
-		for(int i = 0; i<c; i++){
-			waystones.add(BaseInfo.fromBytes(buf));
-		}
-	}
+    public BaseUpdateClientMessage() {
+        waystones = PostHandler.getNativeWaystones();
+    }
+
+    @Override
+    public void toBytes(ByteBuf buf) {
+        buf.writeInt(waystones.size());
+        for (BaseInfo now : waystones) {
+            now.toBytes(buf);
+        }
+    }
+
+    @Override
+    public void fromBytes(ByteBuf buf) {
+        waystones = new StonedHashSet();
+        int c = buf.readInt();
+        for (int i = 0; i < c; i++) {
+            waystones.add(BaseInfo.fromBytes(buf));
+        }
+    }
 
 }

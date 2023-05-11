@@ -5,15 +5,21 @@ import net.minecraftforge.client.model.IModelCustom;
 
 public interface ModelObject {
 
-	public IModelCustom getModel();
-	public ResourceLocation getTexture();
+    public IModelCustom getModel();
 
-	public double rotX();
-	public double rotY();
-	public double rotZ();
-	public double getAngle();
+    public ResourceLocation getTexture();
 
-	public double transX();
-	public double transY();
-	public double transZ();
+    public double rotX();
+
+    public double rotY();
+
+    public double rotZ();
+
+    public double getAngle();
+
+    public double transX();
+
+    public double transY();
+
+    public double transZ();
 }
