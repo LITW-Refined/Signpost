@@ -33,7 +33,7 @@ public class BlockHandlerClient extends BlockHandler {
             tile.isItem = true;
             tile.blockType = now;
             MinecraftForgeClient
-                .registerItemRenderer(Item.getItemFromBlock(now), new BlockItemRenderer(tile, new PostRenderer()));
+                .registerItemRenderer(Item.getItemFromBlock(now), new BlockItemRenderer(tile, new BigPostRenderer()));
         }
 
         ClientRegistry.bindTileEntitySpecialRenderer(BaseModelPostTile.class, new ModelRenderer());
