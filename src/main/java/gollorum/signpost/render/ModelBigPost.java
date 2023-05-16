@@ -35,7 +35,7 @@ public class ModelBigPost extends ModelBase {
         if (tile.isItem) {
             postRenderer.setTexture(((BigPostPost) tile.blockType).type.resLocMain);
         } else {
-            if (tile.isAwaitingPaint() && tile.getPaintObject() instanceof BigBaseInfo) {
+            if (tile.getPaintObject() instanceof BigBaseInfo) {
                 postRenderer.setTexture(tilebases.POST_PAINT);
             } else {
                 postRenderer.setTexture(tilebases.postPaint);

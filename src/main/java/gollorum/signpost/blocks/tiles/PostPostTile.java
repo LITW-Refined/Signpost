@@ -29,6 +29,7 @@ import gollorum.signpost.util.Sign.OverlayType;
 public class PostPostTile extends SuperPostPostTile {
 
     public PostType type = PostType.OAK;
+    public static final int DESCRIPTIONLENGTH = 4;
     private boolean isLoading = false;
 
     @Deprecated
@@ -113,6 +114,10 @@ public class PostPostTile extends SuperPostPostTile {
         tagCompound.setString("paint2", SuperPostPostTile.locToString(bases.sign2.paint));
         tagCompound.setString("postPaint", SuperPostPostTile.locToString(bases.postPaint));
 
+        for (int i = 0; i < bases.description.length; i++) {
+            tagCompound.setString("description" + i, bases.description[i]);
+        }
+
         if (bases.equals(bases.paintObject)) {
             tagCompound.setByte("paintObjectIndex", (byte) 1);
         } else if (bases.sign1.equals(bases.paintObject)) {
@@ -149,6 +154,11 @@ public class PostPostTile extends SuperPostPostTile {
 
         final byte paintObjectIndex = tagCompound.getByte("paintObjectIndex");
 
+        final String[] description = new String[DESCRIPTIONLENGTH];
+        for (int i = 0; i < DESCRIPTIONLENGTH; i++) {
+            description[i] = tagCompound.getString("description" + i);
+        }
+
         SPEventHandler.scheduleTask(new BoolRun() {
 
             @Override
@@ -170,6 +180,7 @@ public class PostPostTile extends SuperPostPostTile {
                     bases.sign2.overlay = overlay2;
                     bases.sign1.point = point1;
                     bases.sign2.point = point2;
+                    bases.description = description;
                     bases.sign1.paint = stringToLoc(paint1);
                     bases.sign2.paint = stringToLoc(paint2);
                     bases.postPaint = postPaint == null || postPaint.equals("")

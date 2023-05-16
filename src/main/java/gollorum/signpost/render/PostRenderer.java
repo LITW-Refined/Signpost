@@ -11,6 +11,7 @@ import gollorum.signpost.Tags;
 import gollorum.signpost.blocks.PostPost.PostType;
 import gollorum.signpost.blocks.tiles.PostPostTile;
 import gollorum.signpost.util.DoubleBaseInfo;
+import gollorum.signpost.util.Sign;
 
 public class PostRenderer extends TileEntitySpecialRenderer {
 
@@ -22,9 +23,7 @@ public class PostRenderer extends TileEntitySpecialRenderer {
         try {
             bindTexture(loc);
         } catch (Exception e) {
-            if (loc == null) {} else if (loc.equals(new ResourceLocation("signpost:textures/blocks/sign.png"))) {
-                bindTexture(new ResourceLocation("signpost:textures/blocks/sign_oak.png"));
-            } else if (loc.equals(new ResourceLocation("signpost:textures/blocks/bigsign.png"))) {
+            if (loc != null && (loc.equals(new ResourceLocation("signpost:textures/blocks/bigsign.png")))) {
                 bindTexture(new ResourceLocation("signpost:textures/blocks/bigsign_oak.png"));
             }
         }
@@ -47,22 +46,27 @@ public class PostRenderer extends TileEntitySpecialRenderer {
         GL11.glTranslated(x + 0.5, y, z + 0.5);
         if (tile.type == null) this.setTexture(PostType.OAK.texture);
         else this.setTexture(tile.type.texture);
-        model.render(this, 0.1f, 0.0625f, tilebases, tile, rotation1, rotation2);
+
+        // Check if we should draw the sign (even without a waystone)
+        String sign1Text = !tile.isItem ? getDrawStringFromSign(tile, tilebases.sign1, 0) : null;
+        String sign2Text = !tile.isItem ? getDrawStringFromSign(tile, tilebases.sign2, 1) : null;
+        boolean drawSign1 = sign1Text != null;
+        boolean drawSign2 = sign2Text != null;
+
+        model.render(this, 0.1f, 0.0625f, tilebases, tile, rotation1, rotation2, drawSign1, drawSign2);
 
         // Overlays
-        if (!tile.isItem) {
-            if (tilebases.sign1.isValid() && tilebases.sign1.overlay != null) {
-                setTexture(
-                    new ResourceLocation(
-                        Tags.MODID + ":textures/blocks/sign_overlay_" + tilebases.sign1.overlay.texture + ".png"));
-                model.renderOverlay1(tilebases, 0.0625f, rotation1);
-            }
-            if (tilebases.sign2.isValid() && tilebases.sign2.overlay != null) {
-                setTexture(
-                    new ResourceLocation(
-                        Tags.MODID + ":textures/blocks/sign_overlay_" + tilebases.sign2.overlay.texture + ".png"));
-                model.renderOverlay2(tilebases, 0.0625f, rotation2);
-            }
+        if (drawSign1 && tilebases.sign1.overlay != null) {
+            setTexture(
+                new ResourceLocation(
+                    Tags.MODID + ":textures/blocks/sign_overlay_" + tilebases.sign1.overlay.texture + ".png"));
+            model.renderOverlay1(tilebases, 0.0625f, rotation1);
+        }
+        if (drawSign2 && tilebases.sign2.overlay != null) {
+            setTexture(
+                new ResourceLocation(
+                    Tags.MODID + ":textures/blocks/sign_overlay_" + tilebases.sign2.overlay.texture + ".png"));
+            model.renderOverlay2(tilebases, 0.0625f, rotation2);
         }
 
         FontRenderer fontrenderer = this.func_147498_b();
@@ -76,60 +80,72 @@ public class PostRenderer extends TileEntitySpecialRenderer {
         int color = 0;
         // int color = (1<<16) + (1<<8);
 
-        if (!tile.isItem) {
-            if (tilebases.sign1.base != null && !tilebases.sign1.base.getName()
-                .equals("null")
-                && !tilebases.sign1.base.getName()
-                    .equals("")) {
-                String s = tilebases.sign1.base.getName();
-                double sc2 = 100d / fontrenderer.getStringWidth(s);
-                if (sc2 >= 1) {
-                    sc2 = 1;
-                }
-                double lurch = (tilebases.sign1.flip ? -0.2 : 0.2) - fontrenderer.getStringWidth(s) * sc * sc2 / 2;
-                double alpha = Math.atan(lurch * 16 / 3.001);
-                double d = Math.sqrt(Math.pow(3.001 / 16, 2) + Math.pow(lurch, 2));
-                double beta = alpha + rotation1;
-                double dx = Math.sin(beta) * d;
-                double dz = -Math.cos(beta) * d;
-                GL11.glPushMatrix();
-                GL11.glTranslated(dx, 0, dz);
-                GL11.glScaled(sc, ys, sc);
-                GL11.glRotated(-Math.toDegrees(rotation1), 0, 1, 0);
-                GL11.glScaled(sc2, sc2, sc2);
-                fontrenderer.drawString(s, 0, 0, color);
-                GL11.glPopMatrix();
+        if (drawSign1) {
+            int stringWidth = fontrenderer.getStringWidth(sign1Text);
+            double sc2 = 100d / stringWidth;
+            if (sc2 >= 1) {
+                sc2 = 1;
             }
+            double lurch = (tilebases.sign1.flip ? -0.2 : 0.2) - stringWidth * sc * sc2 / 2;
+            double alpha = Math.atan(lurch * 16 / 3.001);
+            double d = Math.sqrt(Math.pow(3.001 / 16, 2) + Math.pow(lurch, 2));
+            double beta = alpha + rotation1;
+            double dx = Math.sin(beta) * d;
+            double dz = -Math.cos(beta) * d;
+            GL11.glPushMatrix();
+            GL11.glTranslated(dx, 0, dz);
+            GL11.glScaled(sc, ys, sc);
+            GL11.glRotated(-Math.toDegrees(rotation1), 0, 1, 0);
+            GL11.glScaled(sc2, sc2, sc2);
+            fontrenderer.drawString(sign1Text, 0, 0, color);
+            GL11.glPopMatrix();
+        }
 
-            if (tilebases.sign2.base != null && !tilebases.sign2.base.getName()
-                .equals("null")
-                && !tilebases.sign2.base.getName()
-                    .equals("")) {
-                GL11.glTranslated(0, 0.5d, 0);
-                String s = tilebases.sign2.base.getName();
-                double sc2 = 100d / fontrenderer.getStringWidth(s);
-                if (sc2 >= 1) {
-                    sc2 = 1;
-                }
-                double lurch = (tilebases.sign2.flip ? -0.2 : 0.2) - fontrenderer.getStringWidth(s) * sc * sc2 / 2;
-                double alpha = Math.atan(lurch * 16 / 3.001);
-                double d = Math.sqrt(Math.pow(3.001 / 16, 2) + Math.pow(lurch, 2));
-                double beta = alpha + rotation2;
-                double dx = Math.sin(beta) * d;
-                double dz = -Math.cos(beta) * d;
-                GL11.glPushMatrix();
-                GL11.glTranslated(dx, 0, dz);
-                GL11.glScaled(sc, ys, sc);
-                GL11.glRotated(-Math.toDegrees(rotation2), 0, 1, 0);
-                GL11.glScaled(sc2, sc2, sc2);
-                fontrenderer.drawString(s, 0, 0, color);
-                GL11.glPopMatrix();
+        if (drawSign2) {
+            int stringWidth = fontrenderer.getStringWidth(sign2Text);
+            GL11.glTranslated(0, 0.5d, 0);
+            double sc2 = 100d / stringWidth;
+            if (sc2 >= 1) {
+                sc2 = 1;
             }
+            double lurch = (tilebases.sign2.flip ? -0.2 : 0.2) - stringWidth * sc * sc2 / 2;
+            double alpha = Math.atan(lurch * 16 / 3.001);
+            double d = Math.sqrt(Math.pow(3.001 / 16, 2) + Math.pow(lurch, 2));
+            double beta = alpha + rotation2;
+            double dx = Math.sin(beta) * d;
+            double dz = -Math.cos(beta) * d;
+            GL11.glPushMatrix();
+            GL11.glTranslated(dx, 0, dz);
+            GL11.glScaled(sc, ys, sc);
+            GL11.glRotated(-Math.toDegrees(rotation2), 0, 1, 0);
+            GL11.glScaled(sc2, sc2, sc2);
+            fontrenderer.drawString(sign2Text, 0, 0, color);
+            GL11.glPopMatrix();
         }
 
         GL11.glPopMatrix();
         GL11.glPopMatrix();
 
+    }
+
+    private static String getDrawStringFromSign(PostPostTile tile, Sign sign, int descriptionIndex) {
+        DoubleBaseInfo tilebases = tile.bases;
+        String text = null;
+
+        if (tilebases.description.length > descriptionIndex && tilebases.description[descriptionIndex] != null
+            && !tilebases.description[descriptionIndex].equals("")) {
+            text = tilebases.description[descriptionIndex];
+        } else if (sign.base != null) {
+            text = sign.base.getName();
+            if (sign.base.getName()
+                .equals("")
+                || sign.base.getName()
+                    .equals("null")) {
+                text = null;
+            }
+        }
+
+        return text;
     }
 
 }

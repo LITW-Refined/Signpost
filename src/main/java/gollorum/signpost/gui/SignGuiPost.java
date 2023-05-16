@@ -3,6 +3,7 @@ package gollorum.signpost.gui;
 import java.awt.Color;
 
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.registry.LanguageRegistry;
@@ -20,6 +21,9 @@ public class SignGuiPost extends GuiScreen implements SignInput {
 
     private SignInputBox base1InputBox;
     private SignInputBox base2InputBox;
+
+    private GuiTextField desc1InputBox;
+    private GuiTextField desc2InputBox;
 
     private String std1 = "";
     private int col1 = Color.black.getRGB();
@@ -48,16 +52,24 @@ public class SignGuiPost extends GuiScreen implements SignInput {
 
     private void setupInputBox1() {
         DoubleBaseInfo tilebases = tile.getBases();
-        base1InputBox = new SignInputBox(this.fontRendererObj, this.width / 2 - 68, this.height / 2 - 46, 137, this);
+        int middleHeight = this.height / 2;
+        int startX = this.width / 2 - 68;
+        base1InputBox = new SignInputBox(this.fontRendererObj, startX, middleHeight - 75, 137, this);
         base1InputBox.setText(tilebases.sign1.base == null ? "" : tilebases.sign1.base.toString());
         go1 = true;
+        desc1InputBox = new GuiTextField(this.fontRendererObj, startX, middleHeight - 35, 137, 20);
+        desc1InputBox.setText("" + tilebases.description[0]);
     }
 
     private void setupInputBox2() {
         DoubleBaseInfo tilebases = tile.getBases();
-        base2InputBox = new SignInputBox(this.fontRendererObj, this.width / 2 - 68, this.height / 2 + 40, 137, this);
+        int middleHeight = this.height / 2;
+        int startX = this.width / 2 - 68;
+        base2InputBox = new SignInputBox(this.fontRendererObj, startX, middleHeight + 15, 137, this);
         base2InputBox.setText(tilebases.sign2.base == null ? "" : tilebases.sign2.base.toString());
         go2 = true;
+        desc2InputBox = new GuiTextField(this.fontRendererObj, startX, middleHeight + 55, 137, 20);
+        desc2InputBox.setText("" + tilebases.description[1]);
     }
 
     @Override
@@ -65,6 +77,8 @@ public class SignGuiPost extends GuiScreen implements SignInput {
         super.mouseClicked(x, y, bla);
         base1InputBox.mouseClicked(x, y, bla);
         base2InputBox.mouseClicked(x, y, bla);
+        desc1InputBox.mouseClicked(x, y, bla);
+        desc2InputBox.mouseClicked(x, y, bla);
     }
 
     @Override
@@ -75,15 +89,16 @@ public class SignGuiPost extends GuiScreen implements SignInput {
                 mc = FMLClientHandler.instance()
                     .getClient();
             }
-            if (base1InputBox == null) {
+            if (base1InputBox == null || desc1InputBox == null) {
                 setupInputBox1();
             }
-            if (base2InputBox == null) {
+            if (base2InputBox == null || desc2InputBox == null) {
                 setupInputBox2();
             }
             drawDefaultBackground();
 
             base1InputBox.drawSignBox(fontRendererObj);
+            desc1InputBox.drawTextBox();
             this.drawCenteredString(
                 fontRendererObj,
                 std2,
@@ -92,6 +107,7 @@ public class SignGuiPost extends GuiScreen implements SignInput {
                 col2);
 
             base2InputBox.drawSignBox(fontRendererObj);
+            desc2InputBox.drawTextBox();
             this.drawCenteredString(
                 fontRendererObj,
                 std1,
@@ -130,9 +146,15 @@ public class SignGuiPost extends GuiScreen implements SignInput {
         } else if (par1 == 9) {
             if (base1InputBox.isFocused()) {
                 base1InputBox.setFocused(false);
+                desc1InputBox.setFocused(true);
+            } else if (desc1InputBox.isFocused()) {
+                desc1InputBox.setFocused(false);
                 base2InputBox.setFocused(true);
             } else if (base2InputBox.isFocused()) {
                 base2InputBox.setFocused(false);
+                desc2InputBox.setFocused(true);
+            } else if (desc2InputBox.isFocused()) {
+                desc2InputBox.setFocused(false);
                 base1InputBox.setFocused(true);
             } else {
                 base1InputBox.setFocused(true);
@@ -141,6 +163,8 @@ public class SignGuiPost extends GuiScreen implements SignInput {
         }
         baseType(par1, par2, false);
         baseType(par1, par2, true);
+        desc1InputBox.textboxKeyTyped(par1, par2);
+        desc2InputBox.textboxKeyTyped(par1, par2);
     }
 
     private void baseType(char par1, int par2, boolean base2) {
@@ -264,6 +288,8 @@ public class SignGuiPost extends GuiScreen implements SignInput {
         } else {
             tilebases.sign2.base = null;
         }
+        tilebases.description[0] = desc1InputBox.getText();
+        tilebases.description[1] = desc2InputBox.getText();
         NetworkHandler.netWrap.sendToServer(new SendPostBasesMessage(tile, tilebases));
     }
 

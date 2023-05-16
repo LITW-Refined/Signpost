@@ -23,7 +23,11 @@ public class BigPostRenderer extends TileEntitySpecialRenderer {
     void setTexture(ResourceLocation loc) {
         try {
             bindTexture(loc);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            if (loc != null && loc.equals(new ResourceLocation("signpost:textures/blocks/bigsign.png"))) {
+                bindTexture(new ResourceLocation("signpost:textures/blocks/bigsign_oak.png"));
+            }
+        }
     }
 
     @Override
@@ -53,16 +57,27 @@ public class BigPostRenderer extends TileEntitySpecialRenderer {
             this.setTexture(resLoc = tile.type.texture);
             tilebases.sign.paint = resLoc;
         }
+
+        // Check if we should draw the sign (even without a waystone)
+        boolean drawSign = false;
+        if (!tile.isItem) {
+            for (String s : tilebases.description) {
+                if (!drawSign && s != null && !s.equals("")) {
+                    drawSign = true;
+                }
+            }
+        }
+
         if (resLoc.getResourceDomain()
             .equals("signpost")) {
-            model32.render(this, 0.1f, 0.0625f, tilebases, tile, rotation);
+            model32.render(this, 0.1f, 0.0625f, tilebases, tile, rotation, drawSign);
         } else {
-            model16.render(this, 0.1f, 0.0625f, tilebases, tile, rotation);
+            model16.render(this, 0.1f, 0.0625f, tilebases, tile, rotation, drawSign);
         }
 
         // Overlays
         if (!tile.isItem) {
-            if (tilebases.sign.base != null && tilebases.sign.overlay != null) {
+            if (drawSign && tilebases.sign.overlay != null) {
                 setTexture(
                     new ResourceLocation(
                         Tags.MODID + ":textures/blocks/bigsign_overlay_" + tilebases.sign.overlay.texture + ".png"));
@@ -80,21 +95,19 @@ public class BigPostRenderer extends TileEntitySpecialRenderer {
         int color = 0;
 
         if (!tile.isItem) {
-            if (tilebases.sign.base != null && !tilebases.sign.base.getName()
-                .equals("null")
-                && !tilebases.sign.base.getName()
-                    .equals("")) {
+            if (drawSign) {
                 GL11.glTranslated(0, 0.1, 0);
                 for (String s : tilebases.description) {
+                    int stringWidth = fontrenderer.getStringWidth(s);
                     GL11.glTranslated(0, 0.165, 0);
                     if (s == null) {
                         continue;
                     }
-                    double sc2 = 90d / fontrenderer.getStringWidth(s);
+                    double sc2 = 90d / stringWidth;
                     if (sc2 >= 1) {
                         sc2 = 1;
                     }
-                    double lurch = (tilebases.sign.flip ? -0.1 : 0.1) - fontrenderer.getStringWidth(s) * sc * sc2 / 2;
+                    double lurch = (tilebases.sign.flip ? -0.1 : 0.1) - stringWidth * sc * sc2 / 2;
                     double alpha = Math.atan(lurch * 16 / 3.001);
                     double d = Math.sqrt(Math.pow(3.001 / 16, 2) + Math.pow(lurch, 2));
                     double beta = alpha + rotation;

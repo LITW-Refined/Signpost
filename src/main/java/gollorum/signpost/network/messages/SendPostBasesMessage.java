@@ -30,6 +30,7 @@ public class SendPostBasesMessage implements IMessage {
     public String paint1;
     public String paint2;
 
+    public String[] description;
     public String postPaint;
 
     public byte paintObjectIndex;
@@ -51,6 +52,7 @@ public class SendPostBasesMessage implements IMessage {
         point2 = base.sign2.point;
         paint1 = SuperPostPostTile.locToString(base.sign1.paint);
         paint2 = SuperPostPostTile.locToString(base.sign2.paint);
+        description = base.description;
         postPaint = SuperPostPostTile.locToString(base.postPaint);
 
         if (base.equals(tile.getPaintObject())) {
@@ -77,6 +79,10 @@ public class SendPostBasesMessage implements IMessage {
         ByteBufUtils.writeUTF8String(buf, overlay2);
         buf.writeBoolean(point1);
         buf.writeBoolean(point2);
+        buf.writeInt(description.length);
+        for (String now : description) {
+            ByteBufUtils.writeUTF8String(buf, now);
+        }
         ByteBufUtils.writeUTF8String(buf, "" + paint1);
         ByteBufUtils.writeUTF8String(buf, "" + paint2);
         ByteBufUtils.writeUTF8String(buf, "" + postPaint);
@@ -96,6 +102,10 @@ public class SendPostBasesMessage implements IMessage {
         overlay2 = ByteBufUtils.readUTF8String(buf);
         point1 = buf.readBoolean();
         point2 = buf.readBoolean();
+        description = new String[buf.readInt()];
+        for (int i = 0; i < description.length; i++) {
+            description[i] = ByteBufUtils.readUTF8String(buf);
+        }
         paint1 = ByteBufUtils.readUTF8String(buf);
         paint2 = ByteBufUtils.readUTF8String(buf);
         postPaint = ByteBufUtils.readUTF8String(buf);

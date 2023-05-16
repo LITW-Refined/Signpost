@@ -42,11 +42,12 @@ public class SendAllPostBasesMessage implements IMessage {
 
         public String postPaint;
 
+        public String[] strings;
         public byte paintObjectIndex;
 
         public DoubleStringInt(String string1, String string2, int int1, int int2, boolean bool1, boolean bool2,
             OverlayType overlay1, OverlayType overlay2, boolean bool3, boolean bool4, String paint1, String paint2,
-            String postPaint, byte paintObjectIndex) {
+            String postPaint, String[] strings, byte paintObjectIndex) {
             this.string1 = string1;
             this.string2 = string2;
             this.int1 = int1;
@@ -60,6 +61,7 @@ public class SendAllPostBasesMessage implements IMessage {
             this.paint1 = paint1;
             this.paint2 = paint2;
             this.postPaint = postPaint;
+            this.strings = strings;
             this.paintObjectIndex = paintObjectIndex;
         }
     }
@@ -91,6 +93,7 @@ public class SendAllPostBasesMessage implements IMessage {
                         now.getValue().overlay2,
                         now.getValue().bool4,
                         paint2),
+                    now.getValue().strings,
                     postPaint));
         }
         return postMap;
@@ -120,6 +123,10 @@ public class SendAllPostBasesMessage implements IMessage {
             ByteBufUtils.writeUTF8String(buf, SuperPostPostTile.locToString(now.getValue().sign1.paint));
             ByteBufUtils.writeUTF8String(buf, SuperPostPostTile.locToString(now.getValue().sign2.paint));
             ByteBufUtils.writeUTF8String(buf, SuperPostPostTile.locToString(now.getValue().postPaint));
+            buf.writeInt(now.getValue().description.length);
+            for (String now2 : now.getValue().description) {
+                ByteBufUtils.writeUTF8String(buf, now2);
+            }
             PostPostTile tile = (PostPostTile) now.getKey()
                 .getTile();
             if (tile != null) {
@@ -159,8 +166,17 @@ public class SendAllPostBasesMessage implements IMessage {
                     ByteBufUtils.readUTF8String(buf),
                     ByteBufUtils.readUTF8String(buf),
                     ByteBufUtils.readUTF8String(buf),
+                    readDescription(buf),
                     buf.readByte()));
         }
+    }
+
+    private String[] readDescription(ByteBuf buf) {
+        String[] ret = new String[buf.readInt()];
+        for (int i = 0; i < ret.length; i++) {
+            ret[i] = ByteBufUtils.readUTF8String(buf);
+        }
+        return ret;
     }
 
 }

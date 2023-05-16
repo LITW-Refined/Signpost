@@ -38,7 +38,7 @@ public class ModelPost extends ModelBase {
     }
 
     public void render(PostRenderer postRenderer, float f1, float f5, DoubleBaseInfo tilebases, PostPostTile tile,
-        double rotation1, double rotation2) {
+        double rotation1, double rotation2, boolean drawSignBoard1, boolean drawSignBoard2) {
         super.render(null, 0, f1, 0, 0, 0, f5);
 
         // Post
@@ -71,7 +71,7 @@ public class ModelPost extends ModelBase {
         // Signs
 
         ResourceLocation mainLoc = tile.type.texture;
-        if (tile.isItem || tilebases.sign1.isValid()) {
+        if (tile.isItem || drawSignBoard1) {
             GL11.glPushMatrix();
             GL11.glRotated(180, 0, 0, 1);
             GL11.glTranslated(0, -1.5, 0);
@@ -91,7 +91,7 @@ public class ModelPost extends ModelBase {
             }
             GL11.glPopMatrix();
         }
-        if (tile.isItem || tilebases.sign2.isValid()) {
+        if (tile.isItem || drawSignBoard2) {
             GL11.glPushMatrix();
             GL11.glRotated(180, 0, 0, 1);
             GL11.glTranslated(0, -0.5, 0);
