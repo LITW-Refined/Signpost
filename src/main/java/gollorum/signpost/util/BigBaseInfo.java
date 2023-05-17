@@ -23,4 +23,16 @@ public class BigBaseInfo extends SignBaseInfo {
         this.description = description;
         this.postPaint = texture;
     }
+
+    public boolean hasSignBoard() {
+        boolean drawSign = false;
+
+        for (String s : description) {
+            if (!drawSign && s != null && !s.equals("")) {
+                drawSign = true;
+            }
+        }
+
+        return drawSign;
+    }
 }

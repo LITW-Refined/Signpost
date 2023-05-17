@@ -370,8 +370,8 @@ public class PostPost extends SuperPostPost {
         Intersect sign2Hit = sign2.traceLine(start, end, true);
         Intersect postHit = post.traceLine(start, end, true);
         Intersect waystoneHit = waystone.traceLine(start, end, true);
-        double sign1Dist = sign1Hit.exists && bases.sign1.isValid() ? sign1Hit.pos.distance(start) : Double.MAX_VALUE;
-        double sign2Dist = sign2Hit.exists && bases.sign2.isValid() ? sign2Hit.pos.distance(start) : Double.MAX_VALUE;
+        double sign1Dist = sign1Hit.exists && bases.hasSignBoard1() ? sign1Hit.pos.distance(start) : Double.MAX_VALUE;
+        double sign2Dist = sign2Hit.exists && bases.hasSignBoard2() ? sign2Hit.pos.distance(start) : Double.MAX_VALUE;
         double postDist = postHit.exists ? postHit.pos.distance(start) : Double.MAX_VALUE / 2;
         double waystoneDist = waystoneHit.exists && tile.isWaystone() ? waystoneHit.pos.distance(start)
             : Double.MAX_VALUE;

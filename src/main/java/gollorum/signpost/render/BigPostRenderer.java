@@ -59,14 +59,7 @@ public class BigPostRenderer extends TileEntitySpecialRenderer {
         }
 
         // Check if we should draw the sign (even without a waystone)
-        boolean drawSign = false;
-        if (!tile.isItem) {
-            for (String s : tilebases.description) {
-                if (!drawSign && s != null && !s.equals("")) {
-                    drawSign = true;
-                }
-            }
-        }
+        boolean drawSign = !tile.isItem && tilebases.hasSignBoard();
 
         if (resLoc.getResourceDomain()
             .equals("signpost")) {

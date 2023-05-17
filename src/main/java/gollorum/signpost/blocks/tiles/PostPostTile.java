@@ -29,7 +29,7 @@ import gollorum.signpost.util.Sign.OverlayType;
 public class PostPostTile extends SuperPostPostTile {
 
     public PostType type = PostType.OAK;
-    public static final int DESCRIPTIONLENGTH = 4;
+    public static final int DESCRIPTIONLENGTH = 2;
     private boolean isLoading = false;
 
     @Deprecated

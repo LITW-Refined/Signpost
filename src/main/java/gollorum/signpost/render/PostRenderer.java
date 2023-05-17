@@ -11,7 +11,6 @@ import gollorum.signpost.Tags;
 import gollorum.signpost.blocks.PostPost.PostType;
 import gollorum.signpost.blocks.tiles.PostPostTile;
 import gollorum.signpost.util.DoubleBaseInfo;
-import gollorum.signpost.util.Sign;
 
 public class PostRenderer extends TileEntitySpecialRenderer {
 
@@ -48,8 +47,8 @@ public class PostRenderer extends TileEntitySpecialRenderer {
         else this.setTexture(tile.type.texture);
 
         // Check if we should draw the sign (even without a waystone)
-        String sign1Text = !tile.isItem ? getDrawStringFromSign(tile, tilebases.sign1, 0) : null;
-        String sign2Text = !tile.isItem ? getDrawStringFromSign(tile, tilebases.sign2, 1) : null;
+        String sign1Text = !tile.isItem ? tilebases.getSign1Text() : null;
+        String sign2Text = !tile.isItem ? tilebases.getSign2Text() : null;
         boolean drawSign1 = sign1Text != null;
         boolean drawSign2 = sign2Text != null;
 
@@ -127,25 +126,4 @@ public class PostRenderer extends TileEntitySpecialRenderer {
         GL11.glPopMatrix();
 
     }
-
-    private static String getDrawStringFromSign(PostPostTile tile, Sign sign, int descriptionIndex) {
-        DoubleBaseInfo tilebases = tile.bases;
-        String text = null;
-
-        if (tilebases.description.length > descriptionIndex && tilebases.description[descriptionIndex] != null
-            && !tilebases.description[descriptionIndex].equals("")) {
-            text = tilebases.description[descriptionIndex];
-        } else if (sign.base != null) {
-            text = sign.base.getName();
-            if (sign.base.getName()
-                .equals("")
-                || sign.base.getName()
-                    .equals("null")) {
-                text = null;
-            }
-        }
-
-        return text;
-    }
-
 }
