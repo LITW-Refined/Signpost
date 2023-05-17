@@ -48,6 +48,8 @@ public class SendPostBasesHandler implements IMessageHandler<SendPostBasesMessag
         bases.sign1.paint = SuperPostPostTile.stringToLoc(message.paint1);
         bases.sign2.paint = SuperPostPostTile.stringToLoc(message.paint2);
 
+        bases.description = message.description;
+
         bases.postPaint = SuperPostPostTile.stringToLoc(message.postPaint);
 
         switch (message.paintObjectIndex) {
