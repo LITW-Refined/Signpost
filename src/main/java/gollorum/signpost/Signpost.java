@@ -20,7 +20,6 @@ import gollorum.signpost.management.ConfigHandler;
 import gollorum.signpost.management.PostHandler;
 import gollorum.signpost.worldGen.villages.NameLibrary;
 import gollorum.signpost.worldGen.villages.VillageLibrary;
-import scala.tools.nsc.typechecker.Tags;
 
 @Mod(modid = Signpost.modId, version = Tags.VERSION, name = Signpost.modName)
 public class Signpost {
