@@ -20,7 +20,7 @@ public class SignpostAdapter {
         handlers = new HashSet<>();
 
         if (Loader.isModLoaded(WAYSTONES_MOD_ID)) {
-            registerModHandler(new WaystonesModHandler());
+            // registerModHandler(new WaystonesModHandler());
         }
     }
 

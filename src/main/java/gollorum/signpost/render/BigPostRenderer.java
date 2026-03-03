@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import gollorum.signpost.Tags;
+import gollorum.signpost.Signpost;
 import gollorum.signpost.blocks.tiles.BigPostPostTile;
 import gollorum.signpost.util.BigBaseInfo;
 import gollorum.signpost.util.Sign;
@@ -73,7 +73,9 @@ public class BigPostRenderer extends TileEntitySpecialRenderer {
             if (drawSign && tilebases.sign.overlay != null) {
                 setTexture(
                     new ResourceLocation(
-                        Tags.MODID + ":textures/blocks/bigsign_overlay_" + tilebases.sign.overlay.texture + ".png"));
+                        Signpost.modId + ":textures/blocks/bigsign_overlay_"
+                            + tilebases.sign.overlay.texture
+                            + ".png"));
                 model32.renderOverlay(tilebases, 0.0625f, rotation);
             }
         }

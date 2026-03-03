@@ -12,7 +12,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
 import gollorum.signpost.Signpost;
-import gollorum.signpost.Tags;
 import gollorum.signpost.blocks.tiles.BasePostTile;
 import gollorum.signpost.event.UpdateWaystoneEvent;
 import gollorum.signpost.management.ClientConfigStorage;
@@ -32,7 +31,7 @@ public class BasePost extends BlockContainer {
         this.setResistance(100000);
         setBlockName("SignpostBase");
         setCreativeTab(CreativeTabs.tabTransport);
-        setBlockTextureName(Tags.MODID + ":waystone");
+        setBlockTextureName(Signpost.modId + ":waystone");
     }
 
     @Override

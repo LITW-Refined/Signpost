@@ -3,7 +3,7 @@ package gollorum.signpost.items;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 
-import gollorum.signpost.Tags;
+import gollorum.signpost.Signpost;
 
 public class CalibratedPostWrench extends Item {
 
@@ -12,7 +12,7 @@ public class CalibratedPostWrench extends Item {
 
         this.setUnlocalizedName("SignpostCalibratedTool");
         this.setCreativeTab(CreativeTabs.tabTools);
-        this.setTextureName(Tags.MODID + ":toolcalibrated");
+        this.setTextureName(Signpost.modId + ":toolcalibrated");
     }
 
 }

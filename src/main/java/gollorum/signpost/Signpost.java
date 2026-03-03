@@ -20,9 +20,14 @@ import gollorum.signpost.management.ConfigHandler;
 import gollorum.signpost.management.PostHandler;
 import gollorum.signpost.worldGen.villages.NameLibrary;
 import gollorum.signpost.worldGen.villages.VillageLibrary;
+import scala.tools.nsc.typechecker.Tags;
 
-@Mod(modid = Tags.MODID, version = Tags.VERSION, name = Tags.MODNAME)
+@Mod(modid = Signpost.modId, version = Tags.VERSION, name = Signpost.modName)
 public class Signpost {
+
+    public static final String modId = "signpost";
+    public static final String modGroup = "gollorum.signpost";
+    public static final String modName = "SignPost";
 
     @Instance
     public static Signpost instance;
@@ -33,7 +38,7 @@ public class Signpost {
     public static final int GuiPostRotationID = 4;
 
     public static NBTTagCompound saveFile;
-    public static final Logger LOG = LogManager.getLogger(Tags.MODID);
+    public static final Logger LOG = LogManager.getLogger(Signpost.modId);
 
     public static File configFile;
     public static File configFolder;
@@ -43,9 +48,9 @@ public class Signpost {
 
     @EventHandler
     public void preinit(FMLPreInitializationEvent event) {
-        configFolder = new File(event.getModConfigurationDirectory() + "/" + Tags.MODID);
+        configFolder = new File(event.getModConfigurationDirectory() + "/" + Signpost.modId);
         configFolder.mkdirs();
-        configFile = new File(configFolder.getPath(), Tags.MODID + ".cfg");
+        configFile = new File(configFolder.getPath(), Signpost.modId + ".cfg");
         ConfigHandler.init(configFile);
         NameLibrary.init(configFolder.getPath());
         proxy.preInit();

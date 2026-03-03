@@ -2,17 +2,17 @@ package gollorum.signpost.util;
 
 import net.minecraft.util.ResourceLocation;
 
-import gollorum.signpost.Tags;
+import gollorum.signpost.Signpost;
 
 public interface Paintable {
 
     public static final ResourceLocation SIGN_PAINT = new ResourceLocation(
-        Tags.MODID,
+        Signpost.modId,
         "textures/blocks/sign_paint.png");
     public static final ResourceLocation BIGSIGN_PAINT = new ResourceLocation(
-        Tags.MODID,
+        Signpost.modId,
         "textures/blocks/bigsign_paint.png");
-    public static final ResourceLocation POST_PAINT = new ResourceLocation(Tags.MODID, "textures/blocks/paint.png");
+    public static final ResourceLocation POST_PAINT = new ResourceLocation(Signpost.modId, "textures/blocks/paint.png");
 
     public ResourceLocation getTexture();
 

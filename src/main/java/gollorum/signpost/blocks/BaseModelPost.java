@@ -21,7 +21,6 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import gollorum.signpost.SPEventHandler;
 import gollorum.signpost.Signpost;
-import gollorum.signpost.Tags;
 import gollorum.signpost.blocks.tiles.BaseModelPostTile;
 import gollorum.signpost.event.UpdateWaystoneEvent;
 import gollorum.signpost.management.ClientConfigStorage;
@@ -128,7 +127,7 @@ public class BaseModelPost extends BlockContainer {
         this.setResistance(100000);
         setBlockName("SignpostBase");
         setCreativeTab(CreativeTabs.tabTransport);
-        setBlockTextureName(Tags.MODID + ":base");
+        setBlockTextureName(Signpost.modId + ":base");
         type = ModelType.values()[typ];
     }
 

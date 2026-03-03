@@ -13,7 +13,6 @@ import java.util.Random;
 import org.apache.commons.io.IOUtils;
 
 import gollorum.signpost.Signpost;
-import gollorum.signpost.Tags;
 import gollorum.signpost.management.PostHandler;
 import gollorum.signpost.util.code.MinecraftIndependent;
 
@@ -65,7 +64,7 @@ public class NameLibrary {
 
     private void copyFile(String configFolder, String index) throws IOException {
         InputStream in;
-        in = Signpost.proxy.getResourceInputStream(Tags.MODID + ":worldgen/villagenames" + index + ".txt");
+        in = Signpost.proxy.getResourceInputStream(Signpost.modId + ":worldgen/villagenames" + index + ".txt");
         if (in == null) {
             in = Signpost.proxy.getResourceInputStream("/assets/signpost/worldgen/villagenames" + index + ".txt");
         }

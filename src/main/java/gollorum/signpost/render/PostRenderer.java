@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
-import gollorum.signpost.Tags;
+import gollorum.signpost.Signpost;
 import gollorum.signpost.blocks.PostPost.PostType;
 import gollorum.signpost.blocks.tiles.PostPostTile;
 import gollorum.signpost.util.DoubleBaseInfo;
@@ -58,13 +58,13 @@ public class PostRenderer extends TileEntitySpecialRenderer {
         if (drawSign1 && tilebases.sign1.overlay != null) {
             setTexture(
                 new ResourceLocation(
-                    Tags.MODID + ":textures/blocks/sign_overlay_" + tilebases.sign1.overlay.texture + ".png"));
+                    Signpost.modId + ":textures/blocks/sign_overlay_" + tilebases.sign1.overlay.texture + ".png"));
             model.renderOverlay1(tilebases, 0.0625f, rotation1);
         }
         if (drawSign2 && tilebases.sign2.overlay != null) {
             setTexture(
                 new ResourceLocation(
-                    Tags.MODID + ":textures/blocks/sign_overlay_" + tilebases.sign2.overlay.texture + ".png"));
+                    Signpost.modId + ":textures/blocks/sign_overlay_" + tilebases.sign2.overlay.texture + ".png"));
             model.renderOverlay2(tilebases, 0.0625f, rotation2);
         }
 

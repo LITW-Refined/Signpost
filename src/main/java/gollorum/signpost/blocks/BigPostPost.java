@@ -16,7 +16,6 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 import gollorum.signpost.Signpost;
-import gollorum.signpost.Tags;
 import gollorum.signpost.blocks.tiles.BigPostPostTile;
 import gollorum.signpost.blocks.tiles.SuperPostPostTile;
 import gollorum.signpost.management.ClientConfigStorage;
@@ -57,7 +56,7 @@ public class BigPostPost extends SuperPostPost {
 
         BigPostType(Material material, String texture, String textureMain, Item baseItem, int metadata) {
             this.material = material;
-            this.texture = new ResourceLocation(Tags.MODID + ":textures/blocks/" + texture + ".png");
+            this.texture = new ResourceLocation(Signpost.modId + ":textures/blocks/" + texture + ".png");
             this.blockTexture = texture;
             this.textureMain = textureMain;
             this.resLocMain = new ResourceLocation("minecraft:textures/blocks/" + textureMain + ".png");
@@ -100,7 +99,7 @@ public class BigPostPost extends SuperPostPost {
         this.type = type;
         setBlockName("SignpostBigPost" + type.toString());
         setCreativeTab(CreativeTabs.tabTransport);
-        setBlockTextureName(Tags.MODID + ":" + type.blockTexture);
+        setBlockTextureName(Signpost.modId + ":" + type.blockTexture);
         this.setHardness(2);
         this.setResistance(100000);
         float f = 15F / 32;

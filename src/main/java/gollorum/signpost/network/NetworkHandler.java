@@ -3,7 +3,7 @@ package gollorum.signpost.network;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
-import gollorum.signpost.Tags;
+import gollorum.signpost.Signpost;
 import gollorum.signpost.network.handlers.BaseUpdateClientHandler;
 import gollorum.signpost.network.handlers.BaseUpdateServerHandler;
 import gollorum.signpost.network.handlers.ChatHandler;
@@ -35,7 +35,7 @@ import gollorum.signpost.network.messages.TeleportRequestMessage;
 
 public class NetworkHandler {
 
-    public static final SimpleNetworkWrapper netWrap = NetworkRegistry.INSTANCE.newSimpleChannel(Tags.MODID);
+    public static final SimpleNetworkWrapper netWrap = NetworkRegistry.INSTANCE.newSimpleChannel(Signpost.modId);
 
     public static void register() {
         netWrap.registerMessage(BaseUpdateServerHandler.class, BaseUpdateServerMessage.class, 0, Side.SERVER);
