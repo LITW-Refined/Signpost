@@ -205,10 +205,9 @@ public class PostPostTile extends SuperPostPostTile {
                             bases.awaitingPaint = false;
                             break;
                     }
-                    NetworkHandler.netWrap.sendToAll(
-                        new SendPostBasesMessage(
-                            (PostPostTile) getWorldObj().getTileEntity(xCoord, yCoord, zCoord),
-                            bases));
+                    if (getWorldObj().getTileEntity(xCoord, yCoord, zCoord) instanceof PostPostTile postPostTile) {
+                        NetworkHandler.netWrap.sendToAll(new SendPostBasesMessage(postPostTile, bases));
+                    }
                     isLoading = false;
                     return true;
                 }
